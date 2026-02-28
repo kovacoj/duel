@@ -1,0 +1,14 @@
+title: "Duel Bot"
+description: >-
+  LLM quiz master for the RTVS game show Duel.
+
+game:
+  url: "https://www.duelonline.sk/duelonline_hra.html"
+
+agent:
+  name: "hotentot"
+  age: 33
+  region: "BA"
+  model: "qwen3-30b-a3b-thinking-2507"
+  base_url: "BASE-URL"
+  api_key: "API-KEY"
