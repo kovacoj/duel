@@ -14,3 +14,4 @@ Average attained score out of 20 runs. Maximum score is 10.
 | qwen3-30b-a3b-instruct-2507 | 2.9 |
 | qwen3-30b-a3b-thinking-2507 | 3.8 |
 | mistral-7b-instruct | 1.2 |
+| gemini-2.5-flash | 10.0 |

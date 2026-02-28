@@ -5,6 +5,7 @@ description = "web agent"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "google-genai>=1.65.0",
     "openai>=2.24.0",
     "pyyaml>=6.0.3",
     "requests>=2.32.5",

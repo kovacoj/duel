@@ -1,27 +1,28 @@
-from openai import OpenAI
+from google import genai
+from google.genai import types
 import re
 
 
 class Agent:
     def __init__(self, config):
         self.config = config['agent']
-        
-        self.client = OpenAI(
-            api_key=self.config.get("api_key"),
-            base_url=self.config.get('base_url')
+
+        self.client = genai.Client(
+            api_key = "API-KEY"
         )
 
     def __call__(self, prompt):
-        response = self.client.chat.completions.create(
-            model=self.config.get("model"),
-            messages=[
-                {"role": "system", "content": "You are a quiz player. Select the correct answer from 4 options. Your answer needs to be one of A, B, C, or D. Do not include any explanations or additional text. Only respond with the letter of the correct answer."},
-                {"role": "user", "content": prompt}
-            ]
+        response = self.client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                # thinking_config=types.ThinkingConfig(thinking_level="low"),
+                system_instruction="You are a quiz player. Select the correct answer from 4 options. Your answer needs to be one of A, B, C, or D. Do not include any explanations or additional text. Only respond with the letter of the correct answer."
+            )
         )
 
         return self.clean_response(
-            response.choices[0].message.content
+            response.text
         )
     
     def clean_response(self, response):

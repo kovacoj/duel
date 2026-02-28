@@ -231,11 +231,11 @@ class Client:
             if response != "next":
                 break
 
-        return idx - 1
+        return idx
 
 def main() -> None:
     from .config import config
-    from .agent import Agent
+    from .gemini import Agent
 
     agent = Agent(config)
     client = Client(config, headless=True)
