@@ -1,7 +1,8 @@
 
+from src.duel.browser import ResultState
 from src.duel.providers.offline import BaselineProvider, OracleProvider
 from src.duel.reporting import load_artifacts, write_report
-from src.duel.runner import run_replay
+from src.duel.runner import _infer_live_correctness, run_replay
 from src.duel.storage import save_run_artifact
 
 
@@ -36,3 +37,23 @@ def test_report_generation_aggregates_saved_runs(tmp_path):
     assert '"run_count": 2' in summary
     assert "oracle" in markdown
     assert "baseline" in markdown
+
+
+def test_replay_runner_uses_live_transition_labels():
+    artifact = run_replay(OracleProvider(), "examples/replay_sample.json")
+
+    assert [question.transition for question in artifact.questions] == ["next"] * 5
+
+
+def test_infer_live_correctness_false_when_result_score_does_not_increase():
+    result_state = ResultState(
+        title="Koniec hry",
+        meta="",
+        summary="",
+        message="",
+        time_text="",
+        score=0,
+        max_score=10,
+    )
+
+    assert _infer_live_correctness(0, result_state, "result") is False
