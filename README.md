@@ -1,23 +1,68 @@
 # Duel
 
-`Duel` is a benchmark platform for evaluating LLMs on [RTVS Duel](https://www.duelonline.sk/duelonline_hra.html), a Slovak quiz game built around short-response, culturally specific multiple-choice questions.
+![CI](https://github.com/kovacoj1/duel/actions/workflows/ci.yml/badge.svg)
+![Mode](https://img.shields.io/badge/mode-live%20%2B%20replay-0969da?style=flat-square)
+![Reports](https://img.shields.io/badge/reports-json%20%2B%20markdown-8250df?style=flat-square)
 
-Project started as a Selenium script. Repo now supports replay datasets, provider abstractions, JSON run artifacts, markdown leaderboards, and offline regression tests.
+`Duel` benchmarks LLMs on [RTVS Duel](https://www.duelonline.sk/duelonline_hra.html), Slovak quiz game with 10 multiple-choice questions and 60-second time limit.
+
+Project targets hard case for LLMs: obscure Slovak words, anecdotes, and cultural references in underrepresented language setting. Repo now supports live browser runs, replay datasets, JSON artifacts, markdown reports, and CI-backed regression checks.
 
 ## Why this project matters
 
-- Benchmarks LLM behavior on Slovak-language and culture-heavy questions.
-- Uses real browser automation for live runs, not only synthetic prompts.
-- Supports replay-mode evaluation for fast, deterministic comparisons.
-- Produces artifacts and reports suitable for Git history, CI, and portfolio presentation.
+- niche benchmark with real Slovak-language and culture-heavy questions
+- live browser automation, not only synthetic prompt files
+- replay mode for reproducible offline comparisons
+- report artifacts that make model behavior easy to review on GitHub
 
-## What it can do
+## Benchmark Tracker
 
-- Run live benchmark sessions against duelonline.sk with Selenium.
-- Run offline replay datasets without browser/network flakiness.
-- Compare multiple providers behind one CLI.
-- Save per-run JSON artifacts with prompts, responses, latency, and outcomes.
-- Generate markdown and JSON summaries from accumulated runs.
+Status legend:
+
+- ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square)
+- ![in progress](https://img.shields.io/badge/status-in%20progress-f59e0b?style=flat-square)
+- ![todo](https://img.shields.io/badge/status-todo-d73a49?style=flat-square)
+
+Historical live scores from original project README are preserved below. Average attained score out of 20 runs. Maximum score is 10.
+
+| Model | Status | Avg. score / 10 | Notes |
+| --- | --- | ---: | --- |
+| `gpt-oss-120b` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 4.3 | Historical live runs |
+| `glm-4.7` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 3.3 | Historical live runs |
+| `qwen3-30b-a3b-instruct-2507` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 2.9 | Historical live runs |
+| `qwen3-30b-a3b-thinking-2507` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 3.8 | Historical live runs |
+| `mistral-7b-instruct` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 1.2 | Historical live runs |
+| `gemini-2.5-flash` | ![done](https://img.shields.io/badge/status-done-2ea043?style=flat-square) | 10.0 | Historical live runs |
+| `gpt-4.1-mini` | ![in progress](https://img.shields.io/badge/status-in%20progress-f59e0b?style=flat-square) | pending | OpenAI provider wired, benchmark run pending |
+| `gpt-4.1` | ![in progress](https://img.shields.io/badge/status-in%20progress-f59e0b?style=flat-square) | pending | OpenAI-compatible path available |
+| `gemini-2.5-pro` | ![in progress](https://img.shields.io/badge/status-in%20progress-f59e0b?style=flat-square) | pending | Gemini provider path ready |
+| `claude-3.7-sonnet` | ![todo](https://img.shields.io/badge/status-todo-d73a49?style=flat-square) | pending | Add Anthropic provider integration |
+| `llama-3.3-70b-instruct` | ![todo](https://img.shields.io/badge/status-todo-d73a49?style=flat-square) | pending | Add hosted endpoint and benchmark run |
+| `deepseek-r1` | ![todo](https://img.shields.io/badge/status-todo-d73a49?style=flat-square) | pending | Add provider path and cost tracking |
+
+## Current Sample Report
+
+Checked-in replay artifacts currently compare offline `oracle` and `baseline` providers.
+
+| Provider | Model | Source | Runs | Avg Score | Completion |
+| --- | --- | --- | ---: | ---: | ---: |
+| `baseline` | `always-a` | replay | 2 | 0.0 | 0.0% |
+| `oracle` | `oracle` | replay | 2 | 5.0 | 100.0% |
+
+Full generated output:
+
+- [`reports/leaderboard.md`](reports/leaderboard.md)
+- [`reports/summary.json`](reports/summary.json)
+- [`reports/runs/`](reports/runs/)
+
+## Features
+
+- live benchmark mode against duelonline.sk via Selenium
+- replay benchmark mode from local JSON datasets
+- provider abstraction for OpenAI, Gemini, and offline baselines
+- per-run JSON artifacts with prompt, answer, latency, and result data
+- markdown leaderboard generation for GitHub-friendly presentation
+- pytest + Ruff + GitHub Actions CI
 
 ## Architecture
 
@@ -36,22 +81,20 @@ live site / replay dataset
 
 ## Quickstart
 
-### 1. Install dependencies
+### Install
 
 ```bash
 uv sync --group dev
 ```
 
-### 2. Configure providers
-
-Copy `.env.example` into local shell environment or export variables directly.
+### Configure providers
 
 ```bash
 export DUEL_API_KEY=replace-me
 export GEMINI_API_KEY=replace-me
 ```
 
-### 3. Run replay benchmark
+### Run replay benchmark
 
 ```bash
 uv run duel benchmark \
@@ -61,26 +104,20 @@ uv run duel benchmark \
   --runs 2
 ```
 
-### 4. Build report
+### Build report
 
 ```bash
 uv run duel report
 ```
 
-Artifacts land in `reports/runs/`. Summary outputs land in `reports/leaderboard.md` and `reports/summary.json`.
+### Run quality checks
 
-## Example output
+```bash
+make lint
+make test
+```
 
-Current sample artifacts compare two offline providers:
-
-| Provider | Model | Source | Runs | Avg Score | Completion |
-| --- | --- | --- | ---: | ---: | ---: |
-| `baseline` | `always-a` | replay | 2 | 0.0 | 0.0% |
-| `oracle` | `oracle` | replay | 2 | 5.0 | 100.0% |
-
-See full generated report in [`reports/leaderboard.md`](reports/leaderboard.md).
-
-## Commands
+## Example Commands
 
 ### Replay benchmark
 
@@ -100,39 +137,23 @@ uv run duel benchmark --source live --provider openai --runs 1
 uv run duel report
 ```
 
-### Quality checks
-
-```bash
-make lint
-make test
-```
-
 ## Config
 
-Main config lives in `config.yaml`.
+Main config lives in [`config.yaml`](config.yaml).
 
-Key sections:
+- `player`: profile data sent to live game form
+- `benchmark`: default provider and artifact directory
+- `providers`: model defaults and environment variable names
 
-- `player`: profile data sent to live game form.
-- `benchmark`: default provider and artifact directory.
-- `providers`: model defaults and environment variable names.
+## Limitations
 
-## Repository signals
+- replay dataset is still small and intended for smoke tests/demo flow
+- live mode depends on external site markup and timing behavior
+- token and cost accounting not implemented yet
 
-- Conventional commit history.
-- Offline smoke tests for parsing, config loading, replay runs, and reporting.
-- GitHub Actions CI for Ruff + pytest.
-- Sample dataset and generated benchmark artifacts checked in for review.
+## Next Steps
 
-## Current limitations
-
-- Replay dataset is intentionally small; it demonstrates workflow, not research-grade coverage.
-- Live mode depends on external site markup and timing behavior.
-- Cost tracking is not implemented yet for paid provider runs.
-
-## Good next steps
-
-1. Export larger labeled replay datasets from live sessions.
-2. Add cost/token accounting per provider.
-3. Add richer per-question analytics and trend charts.
-4. Add screenshot/demo assets for GitHub profile presentation.
+1. Add larger labeled replay datasets captured from live sessions.
+2. Add provider-specific token and cost reporting.
+3. Add static charts/dashboard from `reports/summary.json`.
+4. Add screenshots or demo GIF for GitHub profile presentation.
