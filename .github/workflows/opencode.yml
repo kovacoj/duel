@@ -14,8 +14,15 @@ jobs:
   opencode:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.comment.body, '/oc') ||
-      contains(github.event.comment.body, '/opencode')
+      (
+        github.event.comment.user.type != 'Bot' &&
+        (
+          startsWith(github.event.comment.body, '/oc') ||
+          startsWith(github.event.comment.body, '/opencode') ||
+          contains(github.event.comment.body, '\n/oc') ||
+          contains(github.event.comment.body, '\n/opencode')
+        )
+      )
     runs-on: ubuntu-latest
     permissions:
       id-token: write
