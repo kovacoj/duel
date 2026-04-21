@@ -14,8 +14,15 @@ jobs:
   opencode:
     if: |
       github.event_name == 'workflow_dispatch' ||
-      contains(github.event.comment.body, '/oc') ||
-      contains(github.event.comment.body, '/opencode')
+      (
+        github.event.comment.user.type != 'Bot' &&
+        (
+          startsWith(github.event.comment.body, '/oc') ||
+          startsWith(github.event.comment.body, '/opencode') ||
+          contains(github.event.comment.body, '\n/oc') ||
+          contains(github.event.comment.body, '\n/opencode')
+        )
+      )
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -27,7 +34,12 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-          persist-credentials: false
+          persist-credentials: true
+
+      - name: Configure git user for bot pushes
+        run: |
+          git config user.email "opencode-agent@users.noreply.github.com"
+          git config user.name "opencode-agent[bot]"
 
       - name: Run OpenCode from comment
         uses: anomalyco/opencode/github@latest
@@ -35,6 +47,10 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_AUTHOR_NAME: "opencode-agent[bot]"
+          GIT_AUTHOR_EMAIL: "opencode-agent@users.noreply.github.com"
+          GIT_COMMITTER_NAME: "opencode-agent[bot]"
+          GIT_COMMITTER_EMAIL: "opencode-agent@users.noreply.github.com"
         with:
           model: ${{ env.OPENCODE_MODEL }}
           use_github_token: true
