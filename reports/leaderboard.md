@@ -1,6 +1,6 @@
 # Duel Benchmark Report
 
-Generated: `2026-04-21T21:18:47+00:00`
+Generated: `2026-04-21T21:19:59+00:00`
 Runs analyzed: `4`
 
 ## Leaderboard
