@@ -63,6 +63,69 @@ Full generated output:
 - per-run JSON artifacts with prompt, answer, latency, and result data
 - markdown leaderboard generation for GitHub-friendly presentation
 - pytest + Ruff + GitHub Actions CI
+- OpenCode GitHub automations for comments, PR review, issue triage, schedules, and manual runs
+
+## OpenCode GitHub
+
+Configured workflows:
+
+| Workflow | Triggers | Purpose |
+| --- | --- | --- |
+| `OpenCode Comment Tasks` | `issue_comment`, `pull_request_review_comment`, `workflow_dispatch` | react to `/oc` and `/opencode` comments |
+| `OpenCode PR Review` | `pull_request`, `workflow_dispatch` | review benchmark PRs automatically |
+| `OpenCode Issue Triage` | `issues`, `workflow_dispatch` | triage new issues with spam guard |
+| `OpenCode Scheduled Sweep` | `schedule`, `workflow_dispatch` | weekly repository sweep |
+| `OpenCode Manual Task` | `workflow_dispatch` | ad hoc OpenCode run from Actions tab |
+
+Secret required:
+
+- `OPENCODE_API_KEY`
+
+Current model:
+
+- `opencode/minimax-m2.5-free`
+
+### Why earlier GitHub Action failed
+
+Earlier `403 Resource not accessible by integration` error came from old default-branch workflow config.
+That version had read-only GitHub permissions and did not pass `GITHUB_TOKEN` to OpenCode, so it could not add reactions or comments.
+
+Current workflows now include:
+
+- `GITHUB_TOKEN`
+- `use_github_token: true`
+- write permissions where OpenCode needs to comment, react, open issues, or create PRs
+
+### Quick trigger tests
+
+1. Issue comment:
+
+```text
+/opencode explain this issue
+```
+
+2. PR review comment on code:
+
+```text
+/oc add error handling here
+```
+
+3. Manual run from Actions tab:
+
+- open `OpenCode Manual Task`
+- set `prompt` to something like `Summarize current benchmark architecture and suggest one missing test.`
+
+4. PR auto-review:
+
+- open or update a PR and check `OpenCode PR Review`
+
+5. Issue triage:
+
+- open a new issue from an account older than 30 days
+
+6. Scheduled sweep:
+
+- wait for cron or trigger `OpenCode Scheduled Sweep` manually
 
 ## Architecture
 
