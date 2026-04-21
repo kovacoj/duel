@@ -20,7 +20,13 @@ class GeminiProvider:
             raise ValueError(f"Missing Gemini API key. Set {api_key_env}.")
 
         self.model = model or settings.get("model", "gemini-2.5-flash")
-        self.client = genai.Client(api_key=api_key)
+        # Allow overriding the default Gemini base URL (for custom endpoints/proxies)
+        # The genai.Client accepts an `http_options` dict or types.HttpOptions with
+        # a `base_url` property. If a base_url is provided in settings, pass it
+        # through so the underlying client will direct requests to that endpoint.
+        base_url = settings.get("base_url")
+        http_options = {"base_url": base_url} if base_url else None
+        self.client = genai.Client(api_key=api_key, http_options=http_options)
 
     def answer(self, question: Question) -> ProviderResponse:
         started = perf_counter()
