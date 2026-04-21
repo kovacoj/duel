@@ -40,3 +40,8 @@ jobs:
             - replay dataset and report consistency
             - workflow or documentation regressions
             Prioritize bugs, behavioral regressions, and missing tests.
+
+      - name: Configure git user for bot pushes
+        run: |
+          git config user.email "opencode-agent@users.noreply.github.com"
+          git config user.name "OpenCode Agent"

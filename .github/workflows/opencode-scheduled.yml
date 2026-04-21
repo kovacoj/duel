@@ -37,3 +37,8 @@ jobs:
             assumptions, and benchmark/report drift.
             Summarize findings. If you find actionable problems, open an issue
             with a concise reproduction or cleanup note.
+
+      - name: Configure git user for bot pushes
+        run: |
+          git config user.email "opencode-agent@users.noreply.github.com"
+          git config user.name "OpenCode Agent"
