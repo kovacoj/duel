@@ -37,7 +37,7 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
                 latency_ms=response.latency_ms,
                 correct_choice=question.correct_choice,
                 is_correct=is_correct,
-                transition="complete" if is_correct else "stop",
+                transition="next" if is_correct else "result",
             )
         )
 
@@ -84,7 +84,7 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
                 transition = client.answer(response.answer or "")
                 result_state = client.read_result() if transition == "result" else None
 
-                is_correct = _infer_live_correctness(index, score, result_state, transition)
+                is_correct = _infer_live_correctness(score, result_state, transition)
                 if is_correct:
                     score += 1
 
@@ -138,7 +138,6 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
 
 
 def _infer_live_correctness(
-    index: int,
     score: int,
     result_state: ResultState | None,
     transition: str,
@@ -147,8 +146,6 @@ def _infer_live_correctness(
         return True
     if result_state and result_state.score is not None:
         return result_state.score > score
-    if transition == "result" and index == 10:
-        return True
     return False
 
 
