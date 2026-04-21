@@ -1,0 +1,65 @@
+{
+  "generated_at": "2026-04-21T21:18:47+00:00",
+  "run_count": 4,
+  "leaderboard": [
+    {
+      "provider": "baseline",
+      "model": "always-a",
+      "source_mode": "replay",
+      "runs": 2,
+      "avg_score": 0.0,
+      "best_score": 0,
+      "avg_duration_ms": 0.0,
+      "avg_latency_ms": 0.0,
+      "completion_rate": 0.0
+    },
+    {
+      "provider": "oracle",
+      "model": "oracle",
+      "source_mode": "replay",
+      "runs": 2,
+      "avg_score": 5.0,
+      "best_score": 5,
+      "avg_duration_ms": 0.5,
+      "avg_latency_ms": 0.0,
+      "completion_rate": 100.0
+    }
+  ],
+  "question_stats": [
+    {
+      "question": "Ktoré mesto je hlavným mestom Slovenska?",
+      "correct_choice": "C",
+      "attempts": 4,
+      "correct": 2,
+      "accuracy": 50.0
+    },
+    {
+      "question": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?",
+      "correct_choice": "B",
+      "attempts": 2,
+      "correct": 2,
+      "accuracy": 100.0
+    },
+    {
+      "question": "Koľko strán má štandardná kocka?",
+      "correct_choice": "D",
+      "attempts": 2,
+      "correct": 2,
+      "accuracy": 100.0
+    },
+    {
+      "question": "Ktorá rieka preteká cez Bratislavu?",
+      "correct_choice": "A",
+      "attempts": 2,
+      "correct": 2,
+      "accuracy": 100.0
+    },
+    {
+      "question": "Ktorý deň nasleduje po pondelku?",
+      "correct_choice": "B",
+      "attempts": 2,
+      "correct": 2,
+      "accuracy": 100.0
+    }
+  ]
+}

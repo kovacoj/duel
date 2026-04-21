@@ -1,0 +1,120 @@
+{
+  "run_id": "903727870de8",
+  "created_at": "2026-04-21T21:17:40+00:00",
+  "source": {
+    "mode": "replay",
+    "dataset": "/home/cady/personal/duel/examples/replay_sample.json",
+    "name": "slovak-general-sample",
+    "topic": "vseobecne"
+  },
+  "provider": "oracle",
+  "model": "oracle",
+  "status": "completed",
+  "score": 5,
+  "max_score": 5,
+  "answered_questions": 5,
+  "duration_ms": 1,
+  "questions": [
+    {
+      "index": 1,
+      "question": "Ktoré mesto je hlavným mestom Slovenska?",
+      "options": [
+        "Košice",
+        "Žilina",
+        "Bratislava",
+        "Nitra"
+      ],
+      "prompt": "Ktoré mesto je hlavným mestom Slovenska?\nA) Košice\nB) Žilina\nC) Bratislava\nD) Nitra",
+      "provider": "oracle",
+      "model": "oracle",
+      "raw_response": "C",
+      "answer": "C",
+      "latency_ms": 0,
+      "correct_choice": "C",
+      "is_correct": true,
+      "transition": "complete",
+      "notes": null
+    },
+    {
+      "index": 2,
+      "question": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?",
+      "options": [
+        "9",
+        "11",
+        "7",
+        "13"
+      ],
+      "prompt": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?\nA) 9\nB) 11\nC) 7\nD) 13",
+      "provider": "oracle",
+      "model": "oracle",
+      "raw_response": "B",
+      "answer": "B",
+      "latency_ms": 0,
+      "correct_choice": "B",
+      "is_correct": true,
+      "transition": "complete",
+      "notes": null
+    },
+    {
+      "index": 3,
+      "question": "Ktorá rieka preteká cez Bratislavu?",
+      "options": [
+        "Dunaj",
+        "Váh",
+        "Hron",
+        "Morava"
+      ],
+      "prompt": "Ktorá rieka preteká cez Bratislavu?\nA) Dunaj\nB) Váh\nC) Hron\nD) Morava",
+      "provider": "oracle",
+      "model": "oracle",
+      "raw_response": "A",
+      "answer": "A",
+      "latency_ms": 0,
+      "correct_choice": "A",
+      "is_correct": true,
+      "transition": "complete",
+      "notes": null
+    },
+    {
+      "index": 4,
+      "question": "Koľko strán má štandardná kocka?",
+      "options": [
+        "4",
+        "5",
+        "7",
+        "6"
+      ],
+      "prompt": "Koľko strán má štandardná kocka?\nA) 4\nB) 5\nC) 7\nD) 6",
+      "provider": "oracle",
+      "model": "oracle",
+      "raw_response": "D",
+      "answer": "D",
+      "latency_ms": 0,
+      "correct_choice": "D",
+      "is_correct": true,
+      "transition": "complete",
+      "notes": null
+    },
+    {
+      "index": 5,
+      "question": "Ktorý deň nasleduje po pondelku?",
+      "options": [
+        "Štvrtok",
+        "Utorok",
+        "Sobota",
+        "Nedeľa"
+      ],
+      "prompt": "Ktorý deň nasleduje po pondelku?\nA) Štvrtok\nB) Utorok\nC) Sobota\nD) Nedeľa",
+      "provider": "oracle",
+      "model": "oracle",
+      "raw_response": "B",
+      "answer": "B",
+      "latency_ms": 0,
+      "correct_choice": "B",
+      "is_correct": true,
+      "transition": "complete",
+      "notes": null
+    }
+  ],
+  "notes": "Small offline dataset for smoke tests, demos, and report generation."
+}

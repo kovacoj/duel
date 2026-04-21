@@ -1,0 +1,37 @@
+{
+  "name": "slovak-general-sample",
+  "topic": "vseobecne",
+  "description": "Small offline dataset for smoke tests, demos, and report generation.",
+  "questions": [
+    {
+      "id": "sample-1",
+      "question": "Ktoré mesto je hlavným mestom Slovenska?",
+      "options": ["Košice", "Žilina", "Bratislava", "Nitra"],
+      "correct_choice": "C"
+    },
+    {
+      "id": "sample-2",
+      "question": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?",
+      "options": ["9", "11", "7", "13"],
+      "correct_choice": "B"
+    },
+    {
+      "id": "sample-3",
+      "question": "Ktorá rieka preteká cez Bratislavu?",
+      "options": ["Dunaj", "Váh", "Hron", "Morava"],
+      "correct_choice": "A"
+    },
+    {
+      "id": "sample-4",
+      "question": "Koľko strán má štandardná kocka?",
+      "options": ["4", "5", "7", "6"],
+      "correct_choice": "D"
+    },
+    {
+      "id": "sample-5",
+      "question": "Ktorý deň nasleduje po pondelku?",
+      "options": ["Štvrtok", "Utorok", "Sobota", "Nedeľa"],
+      "correct_choice": "B"
+    }
+  ]
+}
