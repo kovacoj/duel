@@ -1,7 +1,7 @@
 name: OpenCode Comment Tasks
 
 env:
-  OPENCODE_MODEL: opencode/minimax-m2.5-free
+  OPENCODE_MODEL: google/gemini-2.5-flash
 
 on:
   issue_comment:
@@ -32,7 +32,8 @@ jobs:
       - name: Run OpenCode from comment
         uses: anomalyco/opencode/github@latest
         env:
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ env.OPENCODE_MODEL }}

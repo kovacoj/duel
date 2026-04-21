@@ -77,13 +77,14 @@ Configured workflows:
 | `OpenCode Scheduled Sweep` | `schedule`, `workflow_dispatch` | weekly repository sweep |
 | `OpenCode Manual Task` | `workflow_dispatch` | ad hoc OpenCode run from Actions tab |
 
-Secret required:
+Secrets required:
 
-- `OPENCODE_API_KEY`
+- `GEMINI_API_KEY`
+- `GITHUB_TOKEN` is passed by GitHub Actions so OpenCode can comment, review, react, and open issues/PRs
 
 Current model:
 
-- `opencode/minimax-m2.5-free`
+- `google/gemini-2.5-flash`
 
 ### Why earlier GitHub Action failed
 
