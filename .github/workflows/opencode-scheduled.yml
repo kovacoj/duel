@@ -1,19 +1,14 @@
-name: opencode
+name: Scheduled OpenCode Task
 
 env:
   OPENCODE_MODEL: opencode/minimax-m2.5-free
 
 on:
-  issue_comment:
-    types: [created]
-  pull_request_review_comment:
-    types: [created]
+  schedule:
+    - cron: "0 9 * * 1"
 
 jobs:
   opencode:
-    if: |
-      contains(github.event.comment.body, '/oc') ||
-      contains(github.event.comment.body, '/opencode')
     runs-on: ubuntu-latest
     permissions:
       id-token: write
@@ -27,7 +22,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run opencode
+      - name: Run scheduled opencode task
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
@@ -35,3 +30,6 @@ jobs:
         with:
           model: ${{ env.OPENCODE_MODEL }}
           use_github_token: true
+          prompt: |
+            Review the codebase for any TODO comments and create a summary.
+            If you find issues worth addressing, open an issue to track them.

@@ -63,6 +63,35 @@ Full generated output:
 - per-run JSON artifacts with prompt, answer, latency, and result data
 - markdown leaderboard generation for GitHub-friendly presentation
 - pytest + Ruff + GitHub Actions CI
+- OpenCode GitHub automations for comments, PR review, issue triage, schedules, and manual runs
+
+## OpenCode GitHub
+
+Repo is wired with OpenCode workflows under `.github/workflows/`.
+
+| Workflow | Trigger | Purpose |
+| --- | --- | --- |
+| `opencode.yml` | `issue_comment`, `pull_request_review_comment` | Run `/oc` or `/opencode` from issue and code-review comments |
+| `opencode-review.yml` | `pull_request` | Automatic PR review on open/update |
+| `opencode-triage.yml` | `issues` | Automatic issue triage with account-age filter |
+| `opencode-scheduled.yml` | `schedule` | Weekly TODO/codebase sweep |
+| `opencode-manual.yml` | `workflow_dispatch` | Run arbitrary OpenCode task from Actions tab |
+
+Current workflow model: `opencode/minimax-m2.5-free`
+
+Required GitHub Actions secret:
+
+- `OPENCODE_API_KEY`
+
+Example comment triggers:
+
+```text
+/opencode explain this issue
+/opencode fix this
+/oc add error handling here
+```
+
+Note: GitHub Actions sidebar mostly reflects workflows from default branch. If you only added workflows in a PR branch, they may not all appear in the main Actions list until branch is merged.
 
 ## Architecture
 
