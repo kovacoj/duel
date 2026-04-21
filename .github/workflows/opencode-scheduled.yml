@@ -1,4 +1,4 @@
-name: Scheduled OpenCode Task
+name: OpenCode Scheduled Sweep
 
 env:
   OPENCODE_MODEL: opencode/minimax-m2.5-free
@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run scheduled opencode task
+      - name: Run scheduled OpenCode sweep
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
@@ -31,5 +31,7 @@ jobs:
           model: ${{ env.OPENCODE_MODEL }}
           use_github_token: true
           prompt: |
-            Review the codebase for any TODO comments and create a summary.
-            If you find issues worth addressing, open an issue to track them.
+            Review the Duel repository for stale TODO markers, broken workflow
+            assumptions, and benchmark/report drift.
+            Summarize findings. If you find actionable problems, open an issue
+            with a concise reproduction or cleanup note.

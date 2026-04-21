@@ -1,4 +1,4 @@
-name: Issue Triage
+name: OpenCode Issue Triage
 
 env:
   OPENCODE_MODEL: opencode/minimax-m2.5-free
@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run opencode triage
+      - name: Run OpenCode issue triage
         if: steps.check.outputs.result == 'true'
         uses: anomalyco/opencode/github@latest
         env:
@@ -46,7 +46,9 @@ jobs:
           model: ${{ env.OPENCODE_MODEL }}
           use_github_token: true
           prompt: |
-            Review this issue. If there's a clear fix or relevant docs:
-            - Provide documentation links
-            - Add error handling guidance for code examples
-            Otherwise, do not comment.
+            Review this issue for the Duel benchmark repository.
+            If there is a clear fix, explanation, or relevant docs:
+            - summarize likely cause
+            - point to relevant files or commands
+            - suggest next debugging or implementation step
+            If the report is too vague or looks like spam, do not comment.

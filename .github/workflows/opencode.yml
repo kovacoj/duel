@@ -1,4 +1,4 @@
-name: opencode
+name: OpenCode Comment Tasks
 
 env:
   OPENCODE_MODEL: opencode/minimax-m2.5-free
@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - name: Run opencode
+      - name: Run OpenCode from comment
         uses: anomalyco/opencode/github@latest
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
