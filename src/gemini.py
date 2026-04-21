@@ -5,15 +5,15 @@ import re
 
 class Agent:
     def __init__(self, config):
-        self.config = config['agent']
+        self.config = config.get('gemini', {})
 
         self.client = genai.Client(
-            api_key = "API-KEY"
+            api_key=self.config.get("api_key")
         )
 
     def __call__(self, prompt):
         response = self.client.models.generate_content(
-            model="gemini-2.5-flash",
+            model=self.config.get("model", "gemini-2.5-flash"),
             contents=prompt,
             config=types.GenerateContentConfig(
                 # thinking_config=types.ThinkingConfig(thinking_level="low"),
