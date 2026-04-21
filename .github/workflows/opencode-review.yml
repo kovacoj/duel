@@ -1,0 +1,40 @@
+name: OpenCode PR Review
+
+env:
+  OPENCODE_MODEL: opencode/minimax-m2.5-free
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+      issues: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Run OpenCode PR review
+        uses: anomalyco/opencode/github@latest
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          model: ${{ env.OPENCODE_MODEL }}
+          use_github_token: true
+          prompt: |
+            Review this pull request for the Duel benchmark repository.
+            Focus on:
+            - benchmark correctness and scoring logic
+            - provider integrations and config safety
+            - replay dataset and report consistency
+            - workflow or documentation regressions
+            Prioritize bugs, behavioral regressions, and missing tests.
