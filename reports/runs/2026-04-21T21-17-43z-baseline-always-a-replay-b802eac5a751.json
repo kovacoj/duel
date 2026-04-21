@@ -1,0 +1,40 @@
+{
+  "run_id": "b802eac5a751",
+  "created_at": "2026-04-21T21:17:43+00:00",
+  "source": {
+    "mode": "replay",
+    "dataset": "/home/cady/personal/duel/examples/replay_sample.json",
+    "name": "slovak-general-sample",
+    "topic": "vseobecne"
+  },
+  "provider": "baseline",
+  "model": "always-a",
+  "status": "wrong_answer",
+  "score": 0,
+  "max_score": 5,
+  "answered_questions": 1,
+  "duration_ms": 0,
+  "questions": [
+    {
+      "index": 1,
+      "question": "Ktoré mesto je hlavným mestom Slovenska?",
+      "options": [
+        "Košice",
+        "Žilina",
+        "Bratislava",
+        "Nitra"
+      ],
+      "prompt": "Ktoré mesto je hlavným mestom Slovenska?\nA) Košice\nB) Žilina\nC) Bratislava\nD) Nitra",
+      "provider": "baseline",
+      "model": "always-a",
+      "raw_response": "A",
+      "answer": "A",
+      "latency_ms": 0,
+      "correct_choice": "C",
+      "is_correct": false,
+      "transition": "stop",
+      "notes": null
+    }
+  ],
+  "notes": "Small offline dataset for smoke tests, demos, and report generation."
+}

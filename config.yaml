@@ -1,14 +1,24 @@
-title: "Duel Bot"
+title: "Duel"
 description: >-
-  LLM quiz master for the RTVS game show Duel.
+  Benchmark platform for evaluating LLM performance on the RTVS Duel quiz.
 
 game:
   url: "https://www.duelonline.sk/duelonline_hra.html"
 
-agent:
+player:
   name: "hotentot"
   age: 33
   region: "BA"
-  model: "qwen3-30b-a3b-thinking-2507"
-  base_url: "BASE-URL"
-  api_key: "API-KEY"
+
+benchmark:
+  default_provider: "openai"
+  artifacts_dir: "reports/runs"
+
+providers:
+  openai:
+    model: "gpt-4.1-mini"
+    base_url: "https://api.openai.com/v1"
+    api_key_env: "DUEL_API_KEY"
+  gemini:
+    model: "gemini-2.5-flash"
+    api_key_env: "GEMINI_API_KEY"
