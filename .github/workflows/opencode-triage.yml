@@ -1,7 +1,7 @@
 name: OpenCode Issue Triage
 
 env:
-  OPENCODE_MODEL: opencode/minimax-m2.5-free
+  OPENCODE_MODEL: google/gemini-2.5-flash
 
 on:
   issues:
@@ -42,7 +42,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || steps.check.outputs.result == 'true'
         uses: anomalyco/opencode/github@latest
         env:
-          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GOOGLE_GENERATIVE_AI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           model: ${{ env.OPENCODE_MODEL }}
