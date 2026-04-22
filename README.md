@@ -1,6 +1,7 @@
 # Duel
 
 ![CI](https://github.com/kovacoj/duel/actions/workflows/ci.yml/badge.svg)
+![Pages](https://img.shields.io/badge/pages-live-2ea043?style=flat-square)
 ![Mode](https://img.shields.io/badge/mode-live%20%2B%20replay-0969da?style=flat-square)
 ![Reports](https://img.shields.io/badge/reports-json%20%2B%20markdown-8250df?style=flat-square)
 
@@ -54,6 +55,7 @@ Full generated output:
 - [`reports/leaderboard.md`](reports/leaderboard.md)
 - [`reports/summary.json`](reports/summary.json)
 - [`reports/runs/`](reports/runs/)
+- GitHub Pages: [`kovacoj.github.io/duel`](https://kovacoj.github.io/duel/)
 
 ## Features
 
