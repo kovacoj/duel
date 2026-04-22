@@ -85,6 +85,18 @@ Secrets required:
 Current model:
 
 - `google/gemini-2.5-flash`
+  
+## Live leaderboard snapshot
+
+The repository includes a small generated leaderboard snapshot shown on the
+project Pages site. We auto-generate a simple SVG from `reports/summary.json`
+using `tools/generate_leaderboard_svg.py`. To refresh locally:
+
+```bash
+python tools/generate_leaderboard_svg.py
+```
+
+The resulting `docs/leaderboard.svg` is embedded on the GitHub Pages site.
 
 ### Why earlier GitHub Action failed
 
