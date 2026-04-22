@@ -203,6 +203,12 @@ make test
 uv run duel benchmark --source replay --dataset examples/replay_sample.json --provider baseline
 ```
 
+Larger replay dataset for regression checks:
+
+```bash
+uv run duel benchmark --source replay --dataset examples/replay_extended.json --provider oracle
+```
+
 ### Live benchmark
 
 ```bash
@@ -228,6 +234,18 @@ Main config lives in [`config.yaml`](config.yaml).
 If you need to route Gemini requests through an internal Siemens proxy or a
 custom base URL, add `base_url` under the `providers.gemini` section of the
 config. See `config/siemens.example.yaml` for a sample.
+
+### Cost rate overrides
+
+Override cost estimation in `config.yaml`:
+
+```yaml
+benchmark:
+  cost_rates:
+    gemini-2.5-flash:
+      input_per_million: 0.4
+      output_per_million: 3.0
+```
 
 
 ## Limitations

@@ -86,7 +86,7 @@ def _run_benchmark(args, config: dict) -> int:
 
     for run_number in range(1, args.runs + 1):
         artifact = (
-            run_replay(provider, args.dataset)
+            run_replay(provider, args.dataset, config=config)
             if args.source == "replay"
             else run_live(provider, config, headless=args.headless)
         )

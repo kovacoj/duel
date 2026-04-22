@@ -15,6 +15,15 @@ def test_replay_runner_scores_oracle_dataset():
     assert len(artifact.questions) == 5
 
 
+def test_replay_runner_scores_extended_oracle_dataset():
+    artifact = run_replay(OracleProvider(), "examples/replay_extended.json")
+
+    assert artifact.score == 12
+    assert artifact.max_score == 12
+    assert artifact.status == "completed"
+    assert len(artifact.questions) == 12
+
+
 def test_report_generation_aggregates_saved_runs(tmp_path):
     runs_dir = tmp_path / "runs"
     oracle_artifact = run_replay(OracleProvider(), "examples/replay_sample.json")

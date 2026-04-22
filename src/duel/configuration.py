@@ -20,6 +20,7 @@ DEFAULT_CONFIG = {
     "benchmark": {
         "default_provider": "openai",
         "artifacts_dir": "reports/runs",
+        "cost_rates": {},
     },
     "providers": {
         "openai": {
