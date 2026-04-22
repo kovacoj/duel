@@ -6,6 +6,7 @@ from uuid import uuid4
 from .browser import LiveGameClient, ResultState
 from .models import Question, QuestionResult, RunArtifact, utc_now_iso
 from .replay import load_replay_dataset
+from .costs import estimate_cost
 
 
 def run_replay(provider, dataset_path: str) -> RunArtifact:
@@ -18,6 +19,8 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
 
     for question in questions:
         response = provider.answer(question)
+        # If provider returned usage metadata (tokens), attach to question result
+        q_usage = getattr(response, 'usage', None)
         is_correct = response.answer == question.correct_choice if question.correct_choice else None
         if is_correct:
             score += 1
@@ -25,7 +28,7 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
             status = "wrong_answer"
 
         results.append(
-            QuestionResult(
+                QuestionResult(
                 index=question.index,
                 question=question.question,
                 options=question.options,
@@ -37,12 +40,26 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
                 latency_ms=response.latency_ms,
                 correct_choice=question.correct_choice,
                 is_correct=is_correct,
-                transition="next" if is_correct else "result",
+                    transition="next" if is_correct else "result",
+                    usage=q_usage,
             )
         )
 
         if is_correct is False:
             break
+
+    # Aggregate token usage across question results when available
+    prompt_sum = sum((q.usage or {}).get('prompt_tokens', 0) for q in results)
+    response_sum = sum((q.usage or {}).get('response_tokens', 0) for q in results) or sum((q.usage or {}).get('completion_tokens', 0) for q in results)
+    total_sum = sum((q.usage or {}).get('total_tokens', 0) for q in results) or (prompt_sum + response_sum)
+
+    token_usage = {
+        'prompt_tokens': int(prompt_sum),
+        'response_tokens': int(response_sum),
+        'total_tokens': int(total_sum),
+    }
+
+    estimated_cost = estimate_cost(token_usage, provider.model)
 
     return RunArtifact(
         run_id=uuid4().hex[:12],
@@ -62,6 +79,8 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
         duration_ms=round((perf_counter() - started) * 1000),
         questions=results,
         notes=dataset.get("description") or None,
+        token_usage=token_usage,
+        estimated_cost_usd=estimated_cost,
     )
 
 
