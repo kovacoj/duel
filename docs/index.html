@@ -5,86 +5,243 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Duel Benchmark</title>
 <style>
+:root {
+  --bg: #0b1220;
+  --panel: #0f172a;
+  --panel-2: #111c31;
+  --border: #22304a;
+  --text: #e5eefc;
+  --muted: #96a6bf;
+  --done-bg: #0f2b1d;
+  --done-fg: #7ee2a8;
+  --progress-bg: #33250d;
+  --progress-fg: #f7cf70;
+  --todo-bg: #32151b;
+  --todo-fg: #f39aa9;
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
-  padding: 24px;
+  padding: 32px 20px 56px;
   font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  background: #0b1220;
-  color: #e5eefc;
+  background:
+    radial-gradient(circle at top, rgba(88, 118, 255, 0.14), transparent 34%),
+    linear-gradient(180deg, #0a1020 0%, var(--bg) 100%);
+  color: var(--text);
 }
+
 main {
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
 }
+
+.hero {
+  margin-bottom: 26px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 h1,
 h2 {
-  margin: 0 0 16px;
+  margin: 0;
 }
+
 h1 {
-  font-size: 28px;
+  font-size: 34px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
 }
-h2 {
-  margin-top: 32px;
-  font-size: 18px;
+
+.subtitle {
+  max-width: 760px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 16px;
 }
-p,
-li {
-  color: #94a3b8;
+
+.panel {
+  background: linear-gradient(180deg, rgba(17, 28, 49, 0.98), rgba(13, 20, 36, 0.98));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
+
+.table-wrap {
+  overflow-x: auto;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  background: #101827;
 }
-th,
-td {
-  padding: 12px 14px;
-  border-bottom: 1px solid #1f2937;
-  text-align: left;
-}
-th {
+
+thead th {
+  padding: 16px 16px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
   font-size: 12px;
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94a3b8;
+  text-align: left;
+  white-space: nowrap;
 }
+
+tbody td {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(34, 48, 74, 0.7);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+
 td.num {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-code,
-pre {
+
+code {
+  padding: 2px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
   font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 12px;
 }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.status.done {
+  background: var(--done-bg);
+  color: var(--done-fg);
+}
+
+.status.progress {
+  background: var(--progress-bg);
+  color: var(--progress-fg);
+}
+
+.status.todo {
+  background: var(--todo-bg);
+  color: var(--todo-fg);
+}
+
+.section {
+  margin-top: 26px;
+}
+
+.section h2 {
+  margin-bottom: 12px;
+  font-size: 17px;
+}
+
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.setup-card {
+  background: linear-gradient(180deg, rgba(17, 28, 49, 0.98), rgba(13, 20, 36, 0.98));
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.setup-card h3 {
+  margin: 0;
+  padding: 14px 16px 0;
+  font-size: 14px;
+}
+
+.setup-card p {
+  margin: 0;
+  padding: 6px 16px 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 pre {
   margin: 0;
-  padding: 14px;
-  background: #101827;
+  padding: 14px 16px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
   overflow-x: auto;
+  color: #dbe7fb;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
 }
-.section {
-  margin-top: 24px;
+
+.footnote {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 12px;
 }
+
+@media (max-width: 860px) {
+  .setup-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   body {
-    padding: 16px;
+    padding: 20px 14px 40px;
   }
-  th,
-  td {
-    padding: 10px 8px;
-    font-size: 13px;
-  }
+
   h1 {
-    font-size: 24px;
+    font-size: 28px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px 10px;
+    font-size: 13px;
   }
 }
 </style>
 </head>
 <body>
 <main>
-  <h1>Duel Benchmark</h1>
+  <header class="hero">
+    <p class="eyebrow">Benchmark Overview</p>
+    <h1>Duel model tracker</h1>
+    <p class="subtitle">
+      Historical live benchmark table and minimal setup path for running replay benchmarks locally.
+    </p>
+  </header>
 
-  <div class="section">
+  <section class="panel table-wrap">
     <table>
       <thead>
         <tr>
@@ -95,42 +252,50 @@ pre {
         </tr>
       </thead>
       <tbody>
-        <tr><td><code>gpt-oss-120b</code></td><td>done</td><td class="num">4.3</td><td>Historical live runs</td></tr>
-        <tr><td><code>glm-4.7</code></td><td>done</td><td class="num">3.3</td><td>Historical live runs</td></tr>
-        <tr><td><code>qwen3-30b-a3b-instruct-2507</code></td><td>done</td><td class="num">2.9</td><td>Historical live runs</td></tr>
-        <tr><td><code>qwen3-30b-a3b-thinking-2507</code></td><td>done</td><td class="num">3.8</td><td>Historical live runs</td></tr>
-        <tr><td><code>mistral-7b-instruct</code></td><td>done</td><td class="num">1.2</td><td>Historical live runs</td></tr>
-        <tr><td><code>gemini-2.5-flash</code></td><td>done</td><td class="num">10.0</td><td>Historical live runs</td></tr>
-        <tr><td><code>gpt-4.1-mini</code></td><td>in progress</td><td class="num">pending</td><td>OpenAI provider wired, benchmark run pending</td></tr>
-        <tr><td><code>gpt-4.1</code></td><td>in progress</td><td class="num">pending</td><td>OpenAI-compatible path available</td></tr>
-        <tr><td><code>gemini-2.5-pro</code></td><td>in progress</td><td class="num">pending</td><td>Gemini provider path ready</td></tr>
-        <tr><td><code>claude-3.7-sonnet</code></td><td>todo</td><td class="num">pending</td><td>Add Anthropic provider integration</td></tr>
-        <tr><td><code>llama-3.3-70b-instruct</code></td><td>todo</td><td class="num">pending</td><td>Add hosted endpoint and benchmark run</td></tr>
-        <tr><td><code>deepseek-r1</code></td><td>todo</td><td class="num">pending</td><td>Add provider path and cost tracking</td></tr>
+        <tr><td><code>gpt-oss-120b</code></td><td><span class="status done">done</span></td><td class="num">4.3</td><td>Historical live runs</td></tr>
+        <tr><td><code>glm-4.7</code></td><td><span class="status done">done</span></td><td class="num">3.3</td><td>Historical live runs</td></tr>
+        <tr><td><code>qwen3-30b-a3b-instruct-2507</code></td><td><span class="status done">done</span></td><td class="num">2.9</td><td>Historical live runs</td></tr>
+        <tr><td><code>qwen3-30b-a3b-thinking-2507</code></td><td><span class="status done">done</span></td><td class="num">3.8</td><td>Historical live runs</td></tr>
+        <tr><td><code>mistral-7b-instruct</code></td><td><span class="status done">done</span></td><td class="num">1.2</td><td>Historical live runs</td></tr>
+        <tr><td><code>gemini-2.5-flash</code></td><td><span class="status done">done</span></td><td class="num">10.0</td><td>Historical live runs</td></tr>
+        <tr><td><code>gpt-4.1-mini</code></td><td><span class="status progress">in progress</span></td><td class="num">pending</td><td>OpenAI provider wired, benchmark run pending</td></tr>
+        <tr><td><code>gpt-4.1</code></td><td><span class="status progress">in progress</span></td><td class="num">pending</td><td>OpenAI-compatible path available</td></tr>
+        <tr><td><code>gemini-2.5-pro</code></td><td><span class="status progress">in progress</span></td><td class="num">pending</td><td>Gemini provider path ready</td></tr>
+        <tr><td><code>claude-3.7-sonnet</code></td><td><span class="status todo">todo</span></td><td class="num">pending</td><td>Add Anthropic provider integration</td></tr>
+        <tr><td><code>llama-3.3-70b-instruct</code></td><td><span class="status todo">todo</span></td><td class="num">pending</td><td>Add hosted endpoint and benchmark run</td></tr>
+        <tr><td><code>deepseek-r1</code></td><td><span class="status todo">todo</span></td><td class="num">pending</td><td>Add provider path and cost tracking</td></tr>
       </tbody>
     </table>
-  </div>
+  </section>
 
-  <div class="section">
+  <section class="section">
     <h2>Setup</h2>
-    <p>Install dependencies:</p>
-    <pre><code>uv sync --group dev</code></pre>
-  </div>
+    <div class="setup-grid">
+      <article class="setup-card">
+        <h3>Install</h3>
+        <p>Sync project dependencies.</p>
+        <pre><code>uv sync --group dev</code></pre>
+      </article>
 
-  <div class="section">
-    <p>Configure providers:</p>
-    <pre><code>export DUEL_API_KEY=replace-me
+      <article class="setup-card">
+        <h3>Configure providers</h3>
+        <p>Set API keys in shell environment.</p>
+        <pre><code>export DUEL_API_KEY=replace-me
 export GEMINI_API_KEY=replace-me</code></pre>
-  </div>
+      </article>
 
-  <div class="section">
-    <p>Run replay benchmark:</p>
-    <pre><code>uv run duel benchmark \
+      <article class="setup-card">
+        <h3>Run replay benchmark</h3>
+        <p>Execute sample offline run.</p>
+        <pre><code>uv run duel benchmark \
   --source replay \
   --dataset examples/replay_sample.json \
   --provider oracle \
   --runs 2</code></pre>
-  </div>
+      </article>
+    </div>
+    <p class="footnote">Source of truth for this page: README benchmark tracker and quickstart snippets.</p>
+  </section>
 </main>
 </body>
 </html>
