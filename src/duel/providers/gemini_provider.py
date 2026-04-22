@@ -37,10 +37,31 @@ class GeminiProvider:
         )
         latency_ms = round((perf_counter() - started) * 1000)
         raw_response = response.text or ""
+        # Attempt to capture token usage metadata if present in response
+        usage = None
+        # The genai SDK may expose `usage_metadata` or include usage counts
+        # directly on the response. Try a few common shapes and normalize.
+        if hasattr(response, 'usage_metadata') and response.usage_metadata:
+            um = response.usage_metadata
+            meta = {
+                'prompt_tokens': int(um.get('promptTokenCount', 0)) if um.get('promptTokenCount') is not None else None,
+                'response_tokens': int(um.get('responseTokenCount', 0)) if um.get('responseTokenCount') is not None else None,
+                'total_tokens': int(um.get('totalTokenCount', 0)) if um.get('totalTokenCount') is not None else None,
+            }
+            usage = {k: v for k, v in meta.items() if v is not None} or None
+        elif hasattr(response, 'usage') and response.usage:
+            u = response.usage
+            usage = {
+                'prompt_tokens': int(u.get('prompt_tokens', 0)) if u.get('prompt_tokens') is not None else None,
+                'response_tokens': int(u.get('completion_tokens', 0)) if u.get('completion_tokens') is not None else None,
+                'total_tokens': int(u.get('total_tokens', 0)) if u.get('total_tokens') is not None else None,
+            }
+            usage = {k: v for k, v in usage.items() if v is not None} or None
         return ProviderResponse(
             provider=self.name,
             model=self.model,
             raw_response=raw_response,
             answer=normalize_choice(raw_response),
             latency_ms=latency_ms,
+            usage=usage,
         )

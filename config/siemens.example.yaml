@@ -1,0 +1,8 @@
+# Example Siemens-compatible Gemini endpoint configuration
+providers:
+  gemini:
+    model: gemini-2.5-flash
+    api_key_env: GEMINI_API_KEY
+    # Replace with your Siemens internal endpoint that proxies Gemini
+    # Example: https://siemens-proxy.example.internal/genai/v1
+    base_url: "https://siemens-proxy.example.internal/genai/v1"

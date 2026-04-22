@@ -35,10 +35,24 @@ class OpenAIProvider:
         )
         latency_ms = round((perf_counter() - started) * 1000)
         raw_response = response.choices[0].message.content or ""
+        # OpenAI-compatible SDKs often expose usage info
+        usage = None
+        if hasattr(response, 'usage') and response.usage:
+            u = response.usage
+            try:
+                usage = {
+                    'prompt_tokens': int(u.get('prompt_tokens', 0)) if u.get('prompt_tokens') is not None else None,
+                    'response_tokens': int(u.get('completion_tokens', 0)) if u.get('completion_tokens') is not None else None,
+                    'total_tokens': int(u.get('total_tokens', 0)) if u.get('total_tokens') is not None else None,
+                }
+                usage = {k: v for k, v in usage.items() if v is not None} or None
+            except Exception:
+                usage = None
         return ProviderResponse(
             provider=self.name,
             model=self.model,
             raw_response=raw_response,
             answer=normalize_choice(raw_response),
             latency_ms=latency_ms,
+            usage=usage,
         )
