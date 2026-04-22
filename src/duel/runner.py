@@ -26,7 +26,7 @@ def _aggregate_usage(results: list[QuestionResult]) -> dict[str, int]:
     }
 
 
-def run_replay(provider, dataset_path: str) -> RunArtifact:
+def run_replay(provider, dataset_path: str, config: dict | None = None) -> RunArtifact:
     dataset = load_replay_dataset(dataset_path)
     questions: list[Question] = dataset["questions"]
     started = perf_counter()
@@ -65,7 +65,11 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
             break
 
     token_usage = _aggregate_usage(results)
-    estimated_cost = estimate_cost(token_usage, provider.model)
+    estimated_cost = estimate_cost(
+        token_usage,
+        provider.model,
+        rate_overrides=(config or {}).get("benchmark", {}).get("cost_rates"),
+    )
 
     return RunArtifact(
         run_id=uuid4().hex[:12],
@@ -145,7 +149,11 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
             status = "error"
 
     token_usage = _aggregate_usage(results)
-    estimated_cost = estimate_cost(token_usage, provider.model)
+    estimated_cost = estimate_cost(
+        token_usage,
+        provider.model,
+        rate_overrides=config.get("benchmark", {}).get("cost_rates"),
+    )
 
     return RunArtifact(
         run_id=run_id,

@@ -33,3 +33,25 @@ gemini:
     assert config["providers"]["gemini"]["model"] == "gemini-custom"
     assert config["providers"]["gemini"]["api_key"] == "gemini-token"
     assert Path(config["config_path"]) == config_path.resolve()
+
+
+def test_load_config_keeps_cost_rate_overrides(tmp_path):
+    config_path = tmp_path / "config.yaml"
+    config_path.write_text(
+        """
+benchmark:
+  cost_rates:
+    gemini-2.5-flash:
+      input_per_million: 0.4
+      output_per_million: 3.0
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    config = load_config(config_path)
+
+    assert config["benchmark"]["cost_rates"]["gemini-2.5-flash"] == {
+        "input_per_million": 0.4,
+        "output_per_million": 3.0,
+    }

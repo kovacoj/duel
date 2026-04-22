@@ -54,3 +54,19 @@ def test_run_replay_aggregates_token_usage_and_cost():
         "total_tokens": 60,
     }
     assert artifact.estimated_cost_usd is not None
+
+
+def test_estimate_cost_uses_separate_input_output_rates():
+    usage = {"prompt_tokens": 1000, "response_tokens": 500, "total_tokens": 1500}
+    cost = estimate_cost(
+        usage,
+        "custom-model",
+        rate_overrides={
+            "custom-model": {
+                "input_per_million": 1.0,
+                "output_per_million": 2.0,
+            }
+        },
+    )
+
+    assert cost == 0.002

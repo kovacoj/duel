@@ -1,0 +1,79 @@
+{
+  "name": "slovak-general-extended",
+  "topic": "vseobecne",
+  "description": "Larger offline dataset for regression checks, report generation, and provider comparison.",
+  "questions": [
+    {
+      "id": "ext-1",
+      "question": "Ktoré mesto je hlavným mestom Slovenska?",
+      "options": ["Košice", "Žilina", "Bratislava", "Nitra"],
+      "correct_choice": "C"
+    },
+    {
+      "id": "ext-2",
+      "question": "Ktorý štátny symbol má tri vrchy a dvojkríž?",
+      "options": ["Vlajka", "Erb", "Pečať", "Hymna"],
+      "correct_choice": "B"
+    },
+    {
+      "id": "ext-3",
+      "question": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?",
+      "options": ["9", "11", "7", "13"],
+      "correct_choice": "B"
+    },
+    {
+      "id": "ext-4",
+      "question": "Ktorá rieka preteká cez Bratislavu?",
+      "options": ["Dunaj", "Váh", "Hron", "Morava"],
+      "correct_choice": "A"
+    },
+    {
+      "id": "ext-5",
+      "question": "Koľko strán má štandardná kocka?",
+      "options": ["4", "5", "7", "6"],
+      "correct_choice": "D"
+    },
+    {
+      "id": "ext-6",
+      "question": "Ktorý deň nasleduje po pondelku?",
+      "options": ["Štvrtok", "Utorok", "Sobota", "Nedeľa"],
+      "correct_choice": "B"
+    },
+    {
+      "id": "ext-7",
+      "question": "Koľko mesiacov má kalendárny rok?",
+      "options": ["10", "11", "12", "13"],
+      "correct_choice": "C"
+    },
+    {
+      "id": "ext-8",
+      "question": "Aká farba vznikne zmiešaním modrej a žltej?",
+      "options": ["Zelená", "Oranžová", "Fialová", "Červená"],
+      "correct_choice": "A"
+    },
+    {
+      "id": "ext-9",
+      "question": "Koľko kontinentov sa bežne rozlišuje?",
+      "options": ["5", "6", "7", "8"],
+      "correct_choice": "C"
+    },
+    {
+      "id": "ext-10",
+      "question": "Ktorý oceán je najväčší?",
+      "options": ["Indický", "Atlantický", "Severný ľadový", "Tichý"],
+      "correct_choice": "D"
+    },
+    {
+      "id": "ext-11",
+      "question": "Aký plyn dýchame najviac pri bežnom dýchaní?",
+      "options": ["Dusík", "Kyslík", "Vodík", "Hélium"],
+      "correct_choice": "B"
+    },
+    {
+      "id": "ext-12",
+      "question": "Ktorý kov je tekutý pri izbovej teplote?",
+      "options": ["Meď", "Železo", "Ortuť", "Hliník"],
+      "correct_choice": "C"
+    }
+  ]
+}
