@@ -31,6 +31,10 @@ class ProviderResponse:
     raw_response: str
     answer: str | None
     latency_ms: int
+    # Optional usage metadata returned by provider SDKs. May contain token
+    # counts or other billing-related fields. Normalization happens in the
+    # runner.
+    usage: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -48,6 +52,8 @@ class QuestionResult:
     is_correct: bool | None = None
     transition: str | None = None
     notes: str | None = None
+    # provider usage metadata (per-question token counts etc.)
+    usage: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True)
@@ -64,6 +70,10 @@ class RunArtifact:
     duration_ms: int
     questions: list[QuestionResult]
     notes: str | None = None
+    # aggregated token usage for the entire run (canonicalized counts)
+    token_usage: dict[str, int] | None = None
+    # estimated cost in USD (if provider rate table is provided elsewhere)
+    estimated_cost_usd: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

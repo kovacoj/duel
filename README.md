@@ -209,6 +209,13 @@ Main config lives in [`config.yaml`](config.yaml).
 - `benchmark`: default provider and artifact directory
 - `providers`: model defaults and environment variable names
 
+### Siemens / Custom Gemini endpoint example
+
+If you need to route Gemini requests through an internal Siemens proxy or a
+custom base URL, add `base_url` under the `providers.gemini` section of the
+config. See `config/siemens.example.yaml` for a sample.
+
+
 ## Limitations
 
 - replay dataset is still small and intended for smoke tests/demo flow
