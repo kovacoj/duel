@@ -38,6 +38,14 @@ def build_summary(artifacts: list[dict]) -> dict:
     for (provider, model, source_mode), rows in sorted(grouped.items()):
         scores = [int(row.get("score", 0)) for row in rows]
         durations = [int(row.get("duration_ms", 0)) for row in rows]
+        token_totals = [
+            int((row.get("token_usage") or {}).get("total_tokens", 0))
+            for row in rows
+        ]
+        costs = [
+            float(row.get("estimated_cost_usd", 0) or 0)
+            for row in rows
+        ]
         latencies = [
             int(question.get("latency_ms", 0))
             for row in rows
@@ -54,6 +62,10 @@ def build_summary(artifacts: list[dict]) -> dict:
                 "avg_score": round(sum(scores) / len(scores), 2),
                 "best_score": max(scores),
                 "avg_duration_ms": round(sum(durations) / len(durations), 2) if durations else 0,
+                "avg_total_tokens": round(sum(token_totals) / len(token_totals), 2)
+                if token_totals
+                else 0,
+                "avg_estimated_cost_usd": round(sum(costs) / len(costs), 8) if costs else 0,
                 "avg_latency_ms": round(sum(latencies) / len(latencies), 2) if latencies else 0,
                 "completion_rate": round((completions / len(rows)) * 100, 2),
             }
@@ -95,21 +107,23 @@ def render_markdown(summary: dict, artifacts: list[dict]) -> str:
         "",
         "## Leaderboard",
         "",
-        "| Provider | Model | Source | Runs | Avg Score | Best | Avg Latency (ms) | Completion |",
-        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: |",
+        "| Provider | Model | Source | Runs | Avg Score | Best | Avg Tokens | "
+        "Avg Cost (USD) | Avg Latency (ms) | Completion |",
+        "| --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
     ]
 
     for row in summary["leaderboard"]:
         line = (
             "| {provider} | {model} | {source_mode} | {runs} | {avg_score} | "
-            "{best_score} | {avg_latency_ms} | {completion_rate}% |"
+            "{best_score} | {avg_total_tokens} | {avg_estimated_cost_usd} | "
+            "{avg_latency_ms} | {completion_rate}% |"
         )
         lines.append(
             line.format(**row)
         )
 
     if not summary["leaderboard"]:
-        lines.append("| n/a | n/a | n/a | 0 | 0 | 0 | 0 | 0% |")
+        lines.append("| n/a | n/a | n/a | 0 | 0 | 0 | 0 | 0 | 0 | 0% |")
 
     lines.extend(
         [

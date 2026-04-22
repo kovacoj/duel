@@ -1,0 +1,113 @@
+{
+  "summary": {
+    "generated_at": "2026-04-21T21:19:59+00:00",
+    "run_count": 4,
+    "leaderboard": [
+      {
+        "provider": "baseline",
+        "model": "always-a",
+        "source_mode": "replay",
+        "runs": 2,
+        "avg_score": 0.0,
+        "best_score": 0,
+        "avg_duration_ms": 0.0,
+        "avg_latency_ms": 0.0,
+        "completion_rate": 0.0
+      },
+      {
+        "provider": "oracle",
+        "model": "oracle",
+        "source_mode": "replay",
+        "runs": 2,
+        "avg_score": 5.0,
+        "best_score": 5,
+        "avg_duration_ms": 0.5,
+        "avg_latency_ms": 0.0,
+        "completion_rate": 100.0
+      }
+    ],
+    "question_stats": [
+      {
+        "question": "Ktoré mesto je hlavným mestom Slovenska?",
+        "correct_choice": "C",
+        "attempts": 4,
+        "correct": 2,
+        "accuracy": 50.0
+      },
+      {
+        "question": "Koľko hráčov je na ihrisku za jeden futbalový tím pri výkope?",
+        "correct_choice": "B",
+        "attempts": 2,
+        "correct": 2,
+        "accuracy": 100.0
+      },
+      {
+        "question": "Koľko strán má štandardná kocka?",
+        "correct_choice": "D",
+        "attempts": 2,
+        "correct": 2,
+        "accuracy": 100.0
+      },
+      {
+        "question": "Ktorá rieka preteká cez Bratislavu?",
+        "correct_choice": "A",
+        "attempts": 2,
+        "correct": 2,
+        "accuracy": 100.0
+      },
+      {
+        "question": "Ktorý deň nasleduje po pondelku?",
+        "correct_choice": "B",
+        "attempts": 2,
+        "correct": 2,
+        "accuracy": 100.0
+      }
+    ]
+  },
+  "recent_runs": [
+    {
+      "run_id": "b802eac5a751",
+      "provider": "baseline",
+      "model": "always-a",
+      "score": 0,
+      "max_score": 5,
+      "status": "wrong_answer",
+      "created_at": "2026-04-21T21:17:43+00:00",
+      "estimated_cost_usd": null,
+      "token_usage": null
+    },
+    {
+      "run_id": "35ad59861ee3",
+      "provider": "baseline",
+      "model": "always-a",
+      "score": 0,
+      "max_score": 5,
+      "status": "wrong_answer",
+      "created_at": "2026-04-21T21:17:43+00:00",
+      "estimated_cost_usd": null,
+      "token_usage": null
+    },
+    {
+      "run_id": "cf9f4d6572f0",
+      "provider": "oracle",
+      "model": "oracle",
+      "score": 5,
+      "max_score": 5,
+      "status": "completed",
+      "created_at": "2026-04-21T21:17:40+00:00",
+      "estimated_cost_usd": null,
+      "token_usage": null
+    },
+    {
+      "run_id": "903727870de8",
+      "provider": "oracle",
+      "model": "oracle",
+      "score": 5,
+      "max_score": 5,
+      "status": "completed",
+      "created_at": "2026-04-21T21:17:40+00:00",
+      "estimated_cost_usd": null,
+      "token_usage": null
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Duel
 
-![CI](https://github.com/kovacoj1/duel/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/kovacoj/duel/actions/workflows/ci.yml/badge.svg)
 ![Mode](https://img.shields.io/badge/mode-live%20%2B%20replay-0969da?style=flat-square)
 ![Reports](https://img.shields.io/badge/reports-json%20%2B%20markdown-8250df?style=flat-square)
 
@@ -96,7 +96,7 @@ using `tools/generate_leaderboard_svg.py`. To refresh locally:
 python tools/generate_leaderboard_svg.py
 ```
 
-The resulting `docs/leaderboard.svg` is embedded on the GitHub Pages site.
+Resulting `docs/leaderboard.svg` and `docs/site-data.json` feed GitHub Pages site.
 
 ### Why earlier GitHub Action failed
 
@@ -232,11 +232,11 @@ config. See `config/siemens.example.yaml` for a sample.
 
 - replay dataset is still small and intended for smoke tests/demo flow
 - live mode depends on external site markup and timing behavior
-- token and cost accounting not implemented yet
+- token and cost estimates depend on placeholder rate table and should be tuned for real billing
 
 ## Next Steps
 
 1. Add larger labeled replay datasets captured from live sessions.
-2. Add provider-specific token and cost reporting.
-3. Add static charts/dashboard from `reports/summary.json`.
-4. Add screenshots or demo GIF for GitHub profile presentation.
+2. Tune provider cost tables against real billing.
+3. Add richer charts/dashboard from `reports/summary.json`.
+4. Add live screenshots or short demo capture for portfolio use.

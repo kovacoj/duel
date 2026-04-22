@@ -2,10 +2,10 @@ name: Deploy GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     permissions:
       pages: write
@@ -14,25 +14,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
+      - name: Build docs data
+        run: |
+          python tools/generate_leaderboard_svg.py
+          python tools/generate_summary_chart_svg.py
+          python tools/generate_site_data.py
 
-      - name: Deploy to Pages
-        uses: actions/configure-pages@v4
+      - name: Regenerate leaderboard SVG
+        run: test -f docs/leaderboard.svg && test -f docs/summary-chart.svg && test -f docs/site-data.json
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs
 
   deploy:
-    needs: build-and-deploy
+    needs: build
     runs-on: ubuntu-latest
     permissions:
       pages: write
       id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - name: Deploy
-        uses: actions/deploy-pages@v1
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

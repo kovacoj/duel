@@ -21,6 +21,10 @@ Get started
 
    uv run duel benchmark --source replay --dataset examples/replay_sample.json --provider baseline --runs 2
 
+4. Refresh report and Pages assets when touching reporting or docs:
+
+   make report
+
 Code style and commits
 ----------------------
 

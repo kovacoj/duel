@@ -30,7 +30,7 @@ What to look for in a short technical screening
    set for actions/checkout where the repo automations push commits.
 
 4. Ask about design tradeoffs: replay vs live modes, reproducibility, token
-   and cost accounting (not yet implemented — good interview topic).
+   capture and placeholder cost estimation, plus how to tune rates per provider.
 
 Interview questions
 -------------------

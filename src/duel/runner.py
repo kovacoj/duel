@@ -4,9 +4,26 @@ from time import perf_counter
 from uuid import uuid4
 
 from .browser import LiveGameClient, ResultState
+from .costs import estimate_cost
 from .models import Question, QuestionResult, RunArtifact, utc_now_iso
 from .replay import load_replay_dataset
-from .costs import estimate_cost
+
+
+def _aggregate_usage(results: list[QuestionResult]) -> dict[str, int]:
+    prompt = sum((q.usage or {}).get("prompt_tokens", 0) for q in results)
+    response = sum(
+        (q.usage or {}).get("response_tokens", 0)
+        or (q.usage or {}).get("completion_tokens", 0)
+        for q in results
+    )
+    total = sum((q.usage or {}).get("total_tokens", 0) for q in results)
+    if total == 0 and (prompt or response):
+        total = prompt + response
+    return {
+        "prompt_tokens": int(prompt),
+        "response_tokens": int(response),
+        "total_tokens": int(total),
+    }
 
 
 def run_replay(provider, dataset_path: str) -> RunArtifact:
@@ -19,8 +36,7 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
 
     for question in questions:
         response = provider.answer(question)
-        # If provider returned usage metadata (tokens), attach to question result
-        q_usage = getattr(response, 'usage', None)
+        q_usage = getattr(response, "usage", None)
         is_correct = response.answer == question.correct_choice if question.correct_choice else None
         if is_correct:
             score += 1
@@ -28,7 +44,7 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
             status = "wrong_answer"
 
         results.append(
-                QuestionResult(
+            QuestionResult(
                 index=question.index,
                 question=question.question,
                 options=question.options,
@@ -40,25 +56,15 @@ def run_replay(provider, dataset_path: str) -> RunArtifact:
                 latency_ms=response.latency_ms,
                 correct_choice=question.correct_choice,
                 is_correct=is_correct,
-                    transition="next" if is_correct else "result",
-                    usage=q_usage,
+                transition="next" if is_correct else "result",
+                usage=q_usage,
             )
         )
 
         if is_correct is False:
             break
 
-    # Aggregate token usage across question results when available
-    prompt_sum = sum((q.usage or {}).get('prompt_tokens', 0) for q in results)
-    response_sum = sum((q.usage or {}).get('response_tokens', 0) for q in results) or sum((q.usage or {}).get('completion_tokens', 0) for q in results)
-    total_sum = sum((q.usage or {}).get('total_tokens', 0) for q in results) or (prompt_sum + response_sum)
-
-    token_usage = {
-        'prompt_tokens': int(prompt_sum),
-        'response_tokens': int(response_sum),
-        'total_tokens': int(total_sum),
-    }
-
+    token_usage = _aggregate_usage(results)
     estimated_cost = estimate_cost(token_usage, provider.model)
 
     return RunArtifact(
@@ -100,6 +106,7 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
             for index in range(1, 11):
                 question = client.read_question(index=index)
                 response = provider.answer(question)
+                q_usage = getattr(response, "usage", None)
                 transition = client.answer(response.answer or "")
                 result_state = client.read_result() if transition == "result" else None
 
@@ -122,6 +129,7 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
                         is_correct=is_correct,
                         transition=transition,
                         notes=_result_note(result_state),
+                        usage=q_usage,
                     )
                 )
 
@@ -135,6 +143,9 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
         except Exception as exc:
             note = str(exc)
             status = "error"
+
+    token_usage = _aggregate_usage(results)
+    estimated_cost = estimate_cost(token_usage, provider.model)
 
     return RunArtifact(
         run_id=run_id,
@@ -153,6 +164,8 @@ def run_live(provider, config: dict, *, headless: bool = True) -> RunArtifact:
         duration_ms=round((perf_counter() - started) * 1000),
         questions=results,
         notes=note,
+        token_usage=token_usage,
+        estimated_cost_usd=estimated_cost,
     )
 
 

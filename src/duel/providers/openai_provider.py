@@ -9,6 +9,15 @@ from ..parsing import normalize_choice
 from .base import QUIZ_SYSTEM_PROMPT
 
 
+def _safe_int(value, default=0):
+    if value is None:
+        return None
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
 class OpenAIProvider:
     name = "openai"
 
@@ -16,7 +25,9 @@ class OpenAIProvider:
         api_key = settings.get("api_key")
         if not api_key:
             api_key_env = settings.get("api_key_env", "DUEL_API_KEY")
-            raise ValueError(f"Missing OpenAI-compatible API key. Set {api_key_env}.")
+            raise ValueError(
+                f"Missing OpenAI-compatible API key. Set {api_key_env}."
+            )
 
         self.model = model or settings.get("model", "gpt-4.1-mini")
         self.client = OpenAI(
@@ -35,19 +46,7 @@ class OpenAIProvider:
         )
         latency_ms = round((perf_counter() - started) * 1000)
         raw_response = response.choices[0].message.content or ""
-        # OpenAI-compatible SDKs often expose usage info
-        usage = None
-        if hasattr(response, 'usage') and response.usage:
-            u = response.usage
-            try:
-                usage = {
-                    'prompt_tokens': int(u.get('prompt_tokens', 0)) if u.get('prompt_tokens') is not None else None,
-                    'response_tokens': int(u.get('completion_tokens', 0)) if u.get('completion_tokens') is not None else None,
-                    'total_tokens': int(u.get('total_tokens', 0)) if u.get('total_tokens') is not None else None,
-                }
-                usage = {k: v for k, v in usage.items() if v is not None} or None
-            except Exception:
-                usage = None
+        usage = self._extract_usage(response)
         return ProviderResponse(
             provider=self.name,
             model=self.model,
@@ -56,3 +55,18 @@ class OpenAIProvider:
             latency_ms=latency_ms,
             usage=usage,
         )
+
+    @staticmethod
+    def _extract_usage(response) -> dict | None:
+        if not hasattr(response, "usage") or not response.usage:
+            return None
+        u = response.usage
+        try:
+            meta = {
+                "prompt_tokens": _safe_int(u.get("prompt_tokens")),
+                "response_tokens": _safe_int(u.get("completion_tokens")),
+                "total_tokens": _safe_int(u.get("total_tokens")),
+            }
+            return {k: v for k, v in meta.items() if v is not None} or None
+        except Exception:
+            return None

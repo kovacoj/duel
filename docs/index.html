@@ -1,77 +1,188 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Duel — LLM Benchmark</title>
-    <style>
-      :root{--bg:#0f172a;--card:#0b1220;--accent:#7c3aed;--muted:#94a3b8;--white:#ffffff}
-      body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;text-rendering:optimizeLegibility;background:linear-gradient(180deg,#071029 0%,#021025 100%);color:var(--white)}
-      .wrap{max-width:980px;margin:48px auto;padding:28px}
-      header{display:flex;align-items:center;gap:18px}
-      .logo{width:68px;height:68px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:700}
-      h1{margin:0;font-size:28px}
-      p.lead{color:var(--muted);margin-top:6px}
-      .grid{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:24px}
-      .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,.6)}
-      .muted{color:var(--muted)}
-      .kbd{background:#081022;padding:6px 8px;border-radius:6px;border:1px solid rgba(255,255,255,.04);font-weight:600}
-      footer{margin-top:28px;color:var(--muted);font-size:13px}
-      .stats{display:flex;gap:12px;align-items:center}
-      .stat{padding:8px 12px;background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border-radius:8px}
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <header>
-        <div class="logo">DU</div>
-        <div>
-          <h1>Duel — LLM Benchmark</h1>
-          <p class="lead">Benchmarking LLMs against the RTVS Duel quiz — live automation + replayable runs.</p>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Duel — LLM Benchmark</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#070e1a;--card:#0c1527;--accent:#7c3aed;--cyan:#06b6d4;--gold:#fbbf24;--green:#34d399;--red:#f87171;--muted:#8a9ab5;--white:#f1f5f9;--radius:14px}
+body{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--white);line-height:1.6;overflow-x:hidden}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* --- hero --- */
+.hero{position:relative;overflow:hidden;padding:56px 24px 40px;text-align:center}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(124,58,237,.18),transparent);pointer-events:none}
+.hero h1{font-size:clamp(28px,5vw,44px);font-weight:800;letter-spacing:-.02em}
+.hero h1 span{background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{color:var(--muted);max-width:560px;margin:12px auto 0;font-size:17px}
+.badges{display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap}
+.badge{padding:6px 14px;border-radius:99px;font-size:12px;font-weight:600;letter-spacing:.03em;border:1px solid rgba(255,255,255,.06)}
+.badge.purple{background:rgba(124,58,237,.15);color:#c4b5fd;border-color:rgba(124,58,237,.25)}
+.badge.teal{background:rgba(6,182,212,.12);color:#67e8f9;border-color:rgba(6,182,212,.2)}
+.badge.gold{background:rgba(251,191,36,.1);color:#fde68a;border-color:rgba(251,191,36,.2)}
+
+/* --- layout --- */
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:24px;margin-top:8px}
+@media(max-width:780px){.grid{grid-template-columns:1fr}}
+
+/* --- cards --- */
+.card{background:var(--card);border:1px solid rgba(255,255,255,.04);border-radius:var(--radius);padding:24px;margin-bottom:20px}
+.card h3{font-size:16px;font-weight:700;margin-bottom:10px}
+.muted{color:var(--muted)}
+ul.muted{padding-left:20px}
+ul.muted li{margin-bottom:6px}
+
+/* --- run cards --- */
+.run-card{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:10px;padding:14px 16px;margin-bottom:10px}
+.run-card .meta{font-size:13px;color:var(--muted)}
+.run-card .score{font-size:22px;font-weight:700;white-space:nowrap}
+.run-card .score.perfect{color:var(--green)}
+.run-card .score.ok{color:var(--gold)}
+.run-card .score.low{color:var(--red)}
+
+/* --- leaderboard embed --- */
+.leaderboard-wrap{display:flex;justify-content:center;margin:16px 0}
+.leaderboard-wrap img{max-width:100%;border-radius:8px}
+
+/* --- demo terminal --- */
+.terminal{background:#060d18;border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:16px;font-family:'Fira Code','SF Mono',Menlo,monospace;font-size:13px;color:var(--green);overflow-x:auto}
+.terminal .prompt{color:var(--cyan)}
+.terminal .comment{color:var(--muted)}
+
+/* --- footer --- */
+footer{padding:32px 24px;text-align:center;color:var(--muted);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- =========== HERO =========== -->
+<section class="hero">
+  <h1><span>Duel</span> — LLM Benchmark</h1>
+  <p>Live browser automation meets offline replay. Benchmark language models on Slovak trivia and track token usage, latency, and cost — all in CI.</p>
+  <div class="badges">
+    <span class="badge purple">OpenAI + Gemini</span>
+    <span class="badge teal">CI Automated</span>
+    <span class="badge gold">Token &amp; Cost Tracking</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="grid">
+
+    <!-- ====== LEFT COLUMN ====== -->
+    <div>
+
+      <!-- leaderboard -->
+      <div class="card">
+        <h3>Leaderboard</h3>
+        <div class="leaderboard-wrap">
+          <img src="leaderboard.svg" alt="Leaderboard snapshot" />
         </div>
-      </header>
-
-      <div class="grid">
-        <div>
-          <div class="card">
-            <img src="hero.svg" alt="Duel hero" style="width:100%;border-radius:8px;display:block;margin-bottom:12px;"/>
-            <h3>What</h3>
-            <p class="muted">Duel evaluates language models on a Slovak trivia quiz with tight timing and cultural references. Supports live Selenium runs, offline replay, and provider abstractions.</p>
-
-            <h3 style="margin-top:18px">Key Features</h3>
-            <ul class="muted">
-              <li>Live runs via browser automation</li>
-              <li>Replayable datasets & JSON artifacts</li>
-              <li>Provider abstractions: OpenAI-compatible and Gemini</li>
-              <li>Token usage capture and cost estimates per run</li>
-              <li>OpenCode automations for PRs, triage, and scheduled sweeps</li>
-            </ul>
-          </div>
-
-          <div class="card" style="margin-top:16px">
-            <h3>Quickstart</h3>
-            <p class="muted"><span class="kbd">uv sync --group dev</span> then run a replay benchmark:</p>
-            <pre class="muted" style="background:transparent;padding:8px;border-radius:8px">uv run duel benchmark --source replay --dataset examples/replay_sample.json --provider baseline --runs 2</pre>
-          </div>
-        </div>
-
-        <aside>
-          <div class="card">
-            <h4>Status</h4>
-            <div class="stats" style="margin-top:8px">
-              <div class="stat"><strong>CI</strong><div class="muted">passing</div></div>
-              <div class="stat"><strong>OpenCode</strong><div class="muted">enabled</div></div>
-            </div>
-            <h4 style="margin-top:12px">Contact</h4>
-            <p class="muted">Maintainer: kovacoj1<br/>Email: <span class="kbd">opencode-agent@users.noreply.github.com</span></p>
-          </div>
-        </aside>
       </div>
 
-      <footer>
-        <div>Repository: <a href="https://github.com/kovacoj1/duel" style="color:var(--accent)">kovacoj1/duel</a></div>
-        <div style="margin-top:6px">Generated for recruiter-friendly presentation — includes docs, examples, and CI automation.</div>
-      </footer>
+      <div class="card">
+        <h3>Score Distribution</h3>
+        <div class="leaderboard-wrap">
+          <img src="summary-chart.svg" alt="Summary chart" />
+        </div>
+      </div>
+
+      <!-- sample runs -->
+      <div class="card">
+        <h3>Sample Runs</h3>
+        <div id="runs"></div>
+      </div>
+
+      <!-- demo -->
+      <div class="card">
+        <h3>Try It</h3>
+        <div class="terminal">
+<span class="comment"># install</span>
+<span class="prompt">$</span> uv sync --group dev<br/><br/>
+<span class="comment"># run offline benchmark</span>
+<span class="prompt">$</span> uv run duel benchmark --source replay \<br/>
+&nbsp;&nbsp;--dataset examples/replay_sample.json \<br/>
+&nbsp;&nbsp;--provider oracle --runs 2<br/><br/>
+<span class="comment"># build leaderboard</span>
+<span class="prompt">$</span> uv run duel report
+        </div>
+      </div>
+
     </div>
-  </body>
+
+    <!-- ====== RIGHT COLUMN ====== -->
+    <aside>
+
+      <!-- status -->
+      <div class="card">
+        <h3>Project Status</h3>
+        <table style="width:100%;font-size:13px;border-collapse:collapse">
+          <tr><td class="muted">CI</td><td style="text-align:right"><span style="color:var(--green)">passing</span></td></tr>
+          <tr><td class="muted">Model</td><td style="text-align:right">gemini-2.5-flash</td></tr>
+          <tr><td class="muted">Runs tracked</td><td style="text-align:right" id="run-count">—</td></tr>
+          <tr><td class="muted">Providers</td><td style="text-align:right">4 (openai, gemini, oracle, baseline)</td></tr>
+        </table>
+      </div>
+
+      <!-- features -->
+      <div class="card">
+        <h3>Key Features</h3>
+        <ul class="muted">
+          <li>Live runs via Selenium</li>
+          <li>Replayable offline datasets</li>
+          <li>Token usage &amp; cost estimates</li>
+          <li>Custom Gemini base_url (Siemens)</li>
+          <li>OpenCode automations</li>
+          <li>GitHub Pages leaderboard</li>
+        </ul>
+      </div>
+
+      <!-- links -->
+      <div class="card">
+        <h3>Links</h3>
+        <ul class="muted" style="list-style:none;padding:0">
+          <li><a href="https://github.com/kovacoj/duel">Repository</a></li>
+          <li><a href="leaderboard.md">Leaderboard (md)</a></li>
+          <li><a href="summary.json">Summary (json)</a></li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+</div>
+
+<footer>
+  <div>Maintained by <strong>kovacoj</strong> — MIT License</div>
+  <div style="margin-top:4px">Built for recruiter-friendly evaluation. See RECRUITERS.md for screening guide.</div>
+</footer>
+
+<!-- =========== RUN CARDS (inline data) =========== -->
+<script>
+const el = document.getElementById("runs");
+
+async function loadSiteData() {
+  try {
+    const response = await fetch("site-data.json");
+    if (!response.ok) throw new Error("site-data missing");
+    const payload = await response.json();
+    const runs = payload.recent_runs || [];
+    document.getElementById("run-count").textContent = payload.summary?.run_count ?? runs.length;
+    el.innerHTML = "";
+    runs.forEach((r) => {
+      const pct = r.max_score ? r.score / r.max_score : 0;
+      const cls = pct === 1 ? "perfect" : pct >= 0.5 ? "ok" : "low";
+      el.innerHTML += `<div class="run-card"><div><strong>${r.provider}</strong> <span class="meta">/ ${r.model}</span><div class="meta">${r.run_id} · ${r.status}</div></div><div class="score ${cls}">${r.score}/${r.max_score}</div></div>`;
+    });
+  } catch (_error) {
+    document.getElementById("run-count").textContent = "n/a";
+    el.innerHTML = `<div class="muted">No site data yet. Run <code>make report</code>.</div>`;
+  }
+}
+
+loadSiteData();
+</script>
+</body>
 </html>

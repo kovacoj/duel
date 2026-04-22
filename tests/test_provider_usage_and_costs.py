@@ -1,6 +1,27 @@
-from src.duel.providers.gemini_provider import GeminiProvider
-from src.duel.providers.openai_provider import OpenAIProvider
 from src.duel.costs import estimate_cost
+from src.duel.providers.gemini_provider import GeminiProvider
+from src.duel.runner import run_replay
+
+
+class DummyProvider:
+    name = "dummy"
+    model = "gemini-2.5-flash"
+
+    def answer(self, question):
+        from src.duel.models import ProviderResponse
+
+        return ProviderResponse(
+            provider=self.name,
+            model=self.model,
+            raw_response=question.correct_choice or "A",
+            answer=question.correct_choice or "A",
+            latency_ms=5,
+            usage={
+                "prompt_tokens": 10,
+                "response_tokens": 2,
+                "total_tokens": 12,
+            },
+        )
 
 
 def test_estimate_cost_default_rate():
@@ -21,4 +42,15 @@ def test_gemini_base_url_passed_to_client(monkeypatch, tmp_path):
     monkeypatch.setattr('google.genai.Client', DummyClient)
     settings = {"api_key": "x", "base_url": "https://custom.local/"}
     GeminiProvider(settings)
-    assert calls['http_options'] and calls['http_options'].get('base_url') == "https://custom.local/"
+    assert calls["http_options"] and calls["http_options"].get("base_url") == "https://custom.local/"
+
+
+def test_run_replay_aggregates_token_usage_and_cost():
+    artifact = run_replay(DummyProvider(), "examples/replay_sample.json")
+
+    assert artifact.token_usage == {
+        "prompt_tokens": 50,
+        "response_tokens": 10,
+        "total_tokens": 60,
+    }
+    assert artifact.estimated_cost_usd is not None

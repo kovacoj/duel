@@ -18,6 +18,9 @@ benchmark:
 .PHONY: report
 report:
 	uv run python -m src.main report
+	uv run python tools/generate_leaderboard_svg.py
+	uv run python tools/generate_summary_chart_svg.py
+	uv run python tools/generate_site_data.py
 
 
 .PHONY: lint
