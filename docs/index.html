@@ -166,7 +166,7 @@ code {
 
 .setup-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 16px;
 }
 
@@ -177,9 +177,16 @@ code {
   overflow: hidden;
 }
 
+.setup-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 0;
+}
+
 .setup-card h3 {
   margin: 0;
-  padding: 14px 16px 0;
   font-size: 14px;
 }
 
@@ -188,6 +195,21 @@ code {
   padding: 6px 16px 12px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.copy-btn {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  cursor: pointer;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.copy-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 pre {
@@ -206,12 +228,6 @@ pre {
   margin-top: 16px;
   color: var(--muted);
   font-size: 12px;
-}
-
-@media (max-width: 860px) {
-  .setup-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 720px) {
@@ -272,22 +288,31 @@ pre {
     <h2>Setup</h2>
     <div class="setup-grid">
       <article class="setup-card">
-        <h3>Install</h3>
+        <div class="setup-head">
+          <h3>Install</h3>
+          <button class="copy-btn" data-copy-target="install">Copy</button>
+        </div>
         <p>Sync project dependencies.</p>
-        <pre><code>uv sync --group dev</code></pre>
+        <pre><code id="install">uv sync --group dev</code></pre>
       </article>
 
       <article class="setup-card">
-        <h3>Configure providers</h3>
+        <div class="setup-head">
+          <h3>Configure providers</h3>
+          <button class="copy-btn" data-copy-target="providers">Copy</button>
+        </div>
         <p>Set API keys in shell environment.</p>
-        <pre><code>export DUEL_API_KEY=replace-me
+        <pre><code id="providers">export DUEL_API_KEY=replace-me
 export GEMINI_API_KEY=replace-me</code></pre>
       </article>
 
       <article class="setup-card">
-        <h3>Run replay benchmark</h3>
+        <div class="setup-head">
+          <h3>Run replay benchmark</h3>
+          <button class="copy-btn" data-copy-target="replay">Copy</button>
+        </div>
         <p>Execute sample offline run.</p>
-        <pre><code>uv run duel benchmark \
+        <pre><code id="replay">uv run duel benchmark \
   --source replay \
   --dataset examples/replay_sample.json \
   --provider oracle \
@@ -297,5 +322,21 @@ export GEMINI_API_KEY=replace-me</code></pre>
     <p class="footnote">Source of truth for this page: README benchmark tracker and quickstart snippets.</p>
   </section>
 </main>
+<script>
+for (const button of document.querySelectorAll('.copy-btn')) {
+  button.addEventListener('click', async () => {
+    const target = document.getElementById(button.dataset.copyTarget);
+    if (!target) {
+      return;
+    }
+    await navigator.clipboard.writeText(target.textContent || '');
+    const prev = button.textContent;
+    button.textContent = 'Copied';
+    setTimeout(() => {
+      button.textContent = prev;
+    }, 1200);
+  });
+}
+</script>
 </body>
 </html>
